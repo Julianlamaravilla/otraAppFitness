@@ -52,6 +52,7 @@ Si el sistema detecta colisión entre un objetivo (ej. Carrera) y una limitació
 
 - **R-01: Matriz de Anatomía Funcional:** Relación entre Actividad y Zona Corporal Crítica. Si la lesión compromete el movimiento principal, el sistema obliga a la alerta de rehabilitación.
 - **R-02: Validación Nutricional Estricta:** Bloqueo total de ingredientes prohibidos en el perfil dentro de las sugerencias de menús.
+- **R-03: Inmutabilidad de la Rutina:** El usuario no puede modificar la rutina diaria de forma arbitraria. Los cambios solo se activan por: a) Recalibración quincenal automática, b) Declaración de nueva lesión/molestia (protocolo de bifurcación), o c) Recomendación de rehabilitación post-diagnóstico.
 
 ---
 
@@ -77,4 +78,4 @@ El sistema mantiene en caché local para acceso inmediato:
 - Limitado a un máximo de 5 casos de uso por categoría deportiva.
 
 ---
-**Nota:** Este documento constituye el plano funcional definitivo para el inicio del desarrollo técnico y arquitectura de base de datos.
+**Nota (v1.1):** Este documento incluye restricciones sobre la inmutabilidad de rutinas para garantizar la integridad del proceso atlético y la seguridad médica del usuario.
