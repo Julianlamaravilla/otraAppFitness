@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+  title: Another fitness app Generation API
+  version: 1.0.0
+  description: On-demand generation service for fitness routines and nutritional suggestions.
+
+paths:
+  /v1/routines/generate:
+    post:
+      summary: Generate a bi-weekly fitness routine.
+      parameters:
+        - in: header
+          name: X-Signature
+          required: true
+          schema:
+            type: string
+          description: ECC signature of the request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, snapshot_id]
+              properties:
+                user_id:
+                  type: string
+                  format: uuid
+                snapshot_id:
+                  type: string
+                  format: uuid
+                  description: Must refer to a verified BiometricSnapshot.
+      responses:
+        '201':
+          description: Routine generated successfully.
+        '403':
+          description: Forbidden - Biometric snapshot not verified.
+
+  /v1/nutrition/generate:
+    post:
+      summary: Generate dietary suggestions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, restrictions]
+              properties:
+                user_id:
+                  type: string
+                  format: uuid
+                restrictions:
+                  type: array
+                  items:
+                    type: string
+                  description: List of allergies and restrictions to exclude.
+      responses:
+        '201':
+          description: Suggestions generated successfully.
+
+  /v1/metrics/consistency:
+    get:
+      summary: Calculate habit consistency score.
+      parameters:
+        - in: query
+          name: user_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Consistency score calculated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  score:
+                    type: number
+                    format: float
+                  trend:
+                    type: string
+                    enum: [UP, DOWN, STABLE]
