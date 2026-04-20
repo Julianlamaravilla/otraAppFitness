@@ -1,0 +1,79 @@
+service: fitness-app-api
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    PROGRESS_TABLE: ${self:service}-progress-${self:provider.stage}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:Scan
+            - dynamodb:Query
+          Resource:
+            - Fn::GetAtt: [ProgressTable, Arn]
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+functions:
+  register:
+    handler: src/auth/register.register
+    events:
+      - http:
+          path: auth/register
+          method: post
+  generate:
+    handler: src/routines/generate.generate
+    events:
+      - http:
+          path: routines/generate
+          method: post
+  trackProgress:
+    handler: src/progress/track.track
+    events:
+      - http:
+          path: progress/track
+          method: post
+  getProgressHistory:
+    handler: src/progress/track.getHistory
+    events:
+      - http:
+          path: progress/history
+          method: get
+  getNutrition:
+    handler: src/nutrition/suggest.suggest
+    events:
+      - http:
+          path: nutrition/suggest
+          method: post
+
+resources:
+  Resources:
+    # DynamoDB Table for Progress Metrics
+    ProgressTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.PROGRESS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    # Cognito User Pool Placeholder for Future Auth Migration
+    # UserPool:
+    #   Type: AWS::Cognito::UserPool
+    #   Properties:
+    #     UserPoolName: ${self:service}-user-pool-${self:provider.stage}
+    #     AdminCreateUserConfig:
+    #       AllowAdminCreateUserOnly: false

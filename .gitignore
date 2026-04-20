@@ -1,0 +1,35 @@
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+# Node.js / TypeScript
+node_modules/
+dist/
+build/
+*.log
+.env
+.env.*
+!.env.example
+
+# Serverless
+.serverless/
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+*.DS_Store
+*.iml
+*.xcworkspace/
+*.xcuserdatad/
+.idea/
+.vscode/
+
+# Coverage
+coverage/
